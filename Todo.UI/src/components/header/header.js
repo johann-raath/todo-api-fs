@@ -1,4 +1,4 @@
-import React, { Component, useContext } from 'react'
+import React, { useContext } from 'react'
 import './header.scss';
 import { Grid } from "@material-ui/core"
 import { Link, useHistory } from "react-router-dom";

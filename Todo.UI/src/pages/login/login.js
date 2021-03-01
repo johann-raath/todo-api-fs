@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import axios from 'axios';
-import { TextField, Button, FormGroup } from '@material-ui/core';
+import { TextField, Button, FormGroup, Grid } from '@material-ui/core';
 import { UserContext } from '../../context/userContext';
 import { useFormInput, setUserSession } from '../../utils/common';
 import { useHistory } from "react-router-dom";
@@ -31,10 +31,9 @@ export function Login() {
         ]);
         setErrors(err);
 
-        if (err.length == 0) {
+        if (err.length === 0) {
             axios.post('http://localhost:5000/api/auth', { email: username.value, password: password.value }).then(response => {
-                const { data } = response;
-                console.log(data);
+                const { data } = response;               
                 setLoading(false);
                 setUserSession(data.token, username.value, data.expires);
                 setUser(username.value)
@@ -52,35 +51,43 @@ export function Login() {
 
     useEffect(() => {
         setErrors(null);
-    }, []);
+    }, [setErrors]);
 
     return (
-        <div className="login">
-            <h2>Login</h2>
-            <FormGroup>
-                <TextField
-                    id="userName"
-                    label="User Name"
-                    variant="outlined"
-                    {...username}
-                />
-                <TextField
-                    id="userPassword"
-                    label="Password"
-                    type="password"
-                    autoComplete="current-password"
-                    variant="outlined"
-                    {...password}
-                />
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={async () => {
-                        await AuthenticateUser(username, password);
-                    }}>
-                    Login
+        <Grid
+            container
+            direction="row"
+            justify="center"
+            alignItems="center"
+            className="center-content"
+        >
+            <div className="login">
+                <h2>Login</h2>
+                <FormGroup>
+                    <TextField
+                        id="userName"
+                        label="User Name"
+                        variant="outlined"
+                        {...username}
+                    />
+                    <TextField
+                        id="userPassword"
+                        label="Password"
+                        type="password"
+                        autoComplete="current-password"
+                        variant="outlined"
+                        {...password}
+                    />
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={async () => {
+                            await AuthenticateUser(username, password);
+                        }}>
+                        Login
             </Button>
-            </FormGroup>
-        </div>
+                </FormGroup>
+            </div >
+        </Grid>
     );
 }

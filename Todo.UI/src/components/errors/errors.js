@@ -1,10 +1,9 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import './errors.scss';
 import { ErrorContext } from '../../context/errorContext';
 
 export function Errors() {
-    const { errors } = useContext(ErrorContext);
-    console.log(errors);
+    const { errors } = useContext(ErrorContext);    
     return (
         <div>
             {(errors && errors.length > 0) &&

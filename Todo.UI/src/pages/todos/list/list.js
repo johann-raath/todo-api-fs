@@ -1,6 +1,5 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react'
-import { ListContext } from '../../../context/listContext';
 import { getToken } from '../../../utils/common';
 import { Button } from '@material-ui/core';
 import Table from '@material-ui/core/Table';
@@ -11,8 +10,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import { Link } from "react-router-dom";
-import { DeleteForeverIcon } from '@material-ui/icons';
-
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import './list.scss';
 import { Checkbox } from '@material-ui/core';
 import { LoaderContext } from '../../../context/loaderContext';

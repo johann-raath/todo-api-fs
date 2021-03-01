@@ -2,7 +2,6 @@ import './App.scss';
 import { BrowserRouter as Router, Route, useHistory } from "react-router-dom";
 import { useState, useMemo, useEffect } from "react";
 import { UserContext } from "./context/userContext";
-import { ListContext } from './context/listContext';
 import { ErrorContext } from './context/errorContext';
 import { Container } from "@material-ui/core";
 import { Header } from "./components/header/header";
@@ -32,21 +31,22 @@ function App() {
   useEffect(() => {
     var dateNow = new Date();
     var expiry = new Date(getExpiry());
-
+    var user = getUser();
     if (expiry > dateNow) {
-      setUser(getUser());
-    } else {
+      setUser(user);
+    } else if (user) {
       removeUserSession();
       setUser(null);
       history.push('/');
     }
-  }, []);
+  }, [history]);
 
   return (
     <Container id="todo">
       <Router>
         <UserContext.Provider value={userValue}>
           <Header></Header>
+          <hr />
           <LoaderContext.Provider value={loaderValue}>
             {loaderValue.loading ? (
               <Loader />

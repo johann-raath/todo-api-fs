@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react'
 import axios from 'axios';
-import { TextField, Button, FormGroup } from '@material-ui/core';
+import { TextField, Button, FormGroup, Grid } from '@material-ui/core';
 import { getToken, useFormInput, validateFields } from '../../../utils/common';
 import { useHistory } from "react-router-dom";
 import './create.scss';
@@ -30,7 +30,7 @@ export function Create() {
 
         // TODO : check if todo already exists and prompt to update instead if not completed.
 
-        if (err.length == 0) {
+        if (err.length === 0) {
             axios.post('http://localhost:5000/api/todos', {
                 title: title.value,
                 description: description.value,
@@ -53,33 +53,41 @@ export function Create() {
 
     useEffect(() => {
         setErrors(null);
-    }, []);
+    }, [setErrors]);
 
     return (
-        <div className="create">
-            <h2>Create</h2>
-            <FormGroup>
-                <TextField
-                    id="todoTitle"
-                    label="Title"
-                    variant="outlined"
-                    {...title}
-                />
-                <TextField
-                    id="todoDescription"
-                    label="Description"
-                    variant="outlined"
-                    {...description}
-                />
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={async () => {
-                        await CreateTodo(title, description);
-                    }}>
-                    Create
+        <Grid
+            container
+            direction="row"
+            justify="center"
+            alignItems="center"
+            className="center-content"
+        >
+            <div className="create text-center">
+                <h2>Create</h2>
+                <FormGroup>
+                    <TextField
+                        id="todoTitle"
+                        label="Title"
+                        variant="outlined"
+                        {...title}
+                    />
+                    <TextField
+                        id="todoDescription"
+                        label="Description"
+                        variant="outlined"
+                        {...description}
+                    />
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={async () => {
+                            await CreateTodo(title, description);
+                        }}>
+                        Create
             </Button>
-            </FormGroup>
-        </div>
+                </FormGroup>
+            </div>
+        </Grid>
     );
 }

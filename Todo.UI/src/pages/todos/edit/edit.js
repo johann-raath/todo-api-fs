@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import axios from 'axios';
-import { TextField, Button, Checkbox, FormGroup, FormControlLabel } from '@material-ui/core';
-import { getToken, useFormInput, validateFields } from '../../../utils/common';
+import { TextField, Button, Checkbox, FormGroup, FormControlLabel, Grid } from '@material-ui/core';
+import { getToken, validateFields } from '../../../utils/common';
 import { useHistory } from "react-router-dom";
 import { useParams } from 'react-router';
 import './edit.scss';
@@ -29,7 +29,6 @@ export function Edit() {
             setDescription(data.description);
             setComplete(data.isComplete);
             setTodo(data);
-            console.log(data);
         }).catch(error => {
             setLoading(false);
             if (error.response.status === 401) setErrors([{ msg: error.response.data.title }]);
@@ -51,7 +50,7 @@ export function Edit() {
         ]);
         setErrors(err);
 
-        if (err.length == 0) {
+        if (err.length === 0) {
             axios.put('http://localhost:5000/api/todos/' + todo.id, {
                 title: title,
                 description: description,
@@ -77,58 +76,66 @@ export function Edit() {
     }, []);
 
     return (
-        <div>
-            <h2>Edit</h2>
-            <p><strong>Last updated:</strong> {todo && Date(todo.lastUpdate.ToStrin)}</p>
-            <br />
-            <div className="edit">
-                <FormGroup>
-                    <TextField
-                        id="todoTitle"
-                        label="Title"
-                        variant="outlined"
-                        value={title}
-                        onChange={(e) => {
-                            setTitle(e.target.value);
-                        }}
-                    />
-                    <TextField
-                        id="todoDescription"
-                        label="Description"
-                        variant="outlined"
-                        value={description}
-                        onChange={(e) => {
-                            setDescription(e.target.value);
-                        }}
-                    />
-                    {(complete || reopen) &&
-                        <FormGroup row>
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        onChange={() => {
-                                            setComplete(false);
-                                            setReopen(true);
-                                        }}
-                                        name="checkedB"
-                                        color="primary"
-                                    />
-                                }
-                                label="Task is marked as complete, reopen task?"
-                            />
-                        </FormGroup>
-                    }
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => {
-                            UpdateTodo();
-                        }}
-                    >
-                        Update
+        <Grid
+            container
+            direction="row"
+            justify="center"
+            alignItems="center"
+            className="center-content"
+        >
+            <div class="text-center">
+                <h2>Edit</h2>
+                <p><strong>Last updated:</strong> {todo && Date(todo.lastUpdate.ToStrin)}</p>
+                <br />
+                <div className="edit">
+                    <FormGroup>
+                        <TextField
+                            id="todoTitle"
+                            label="Title"
+                            variant="outlined"
+                            value={title}
+                            onChange={(e) => {
+                                setTitle(e.target.value);
+                            }}
+                        />
+                        <TextField
+                            id="todoDescription"
+                            label="Description"
+                            variant="outlined"
+                            value={description}
+                            onChange={(e) => {
+                                setDescription(e.target.value);
+                            }}
+                        />
+                        {(complete || reopen) &&
+                            <FormGroup row>
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            onChange={() => {
+                                                setComplete(false);
+                                                setReopen(true);
+                                            }}
+                                            name="checkedB"
+                                            color="primary"
+                                        />
+                                    }
+                                    label="Task is marked as complete, reopen task?"
+                                />
+                            </FormGroup>
+                        }
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() => {
+                                UpdateTodo();
+                            }}
+                        >
+                            Update
                     </Button>
-                </FormGroup>
+                    </FormGroup>
+                </div>
             </div>
-        </div>
+        </Grid>
     );
 }

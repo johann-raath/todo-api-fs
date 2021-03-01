@@ -42,9 +42,10 @@ export const setUserSession = (token, user, expires) => {
 export const validateFields = (fields) => {
     let er = [];
     fields.map((field) => {
-        if (field.value.length == 0) {
+        if (field.value.length === 0) {
             er.push({ msg: field.msg })
         }
+        return er;
     });
     return er;
 }
