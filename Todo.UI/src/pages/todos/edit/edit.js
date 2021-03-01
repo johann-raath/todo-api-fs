@@ -1,50 +1,75 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import axios from 'axios';
-import { TextField, Button } from '@material-ui/core';
-import { getToken, useFormInput } from '../../../utils/common';
+import { TextField, Button, Checkbox, FormGroup, FormControlLabel } from '@material-ui/core';
+import { getToken, useFormInput, validateFields } from '../../../utils/common';
 import { useHistory } from "react-router-dom";
 import { useParams } from 'react-router';
 import './edit.scss';
+import { LoaderContext } from '../../../context/loaderContext';
+import { ErrorContext } from '../../../context/errorContext';
 
 export function Edit() {
+    const { setLoading } = useContext(LoaderContext);
+    const { setErrors } = useContext(ErrorContext);
     const history = useHistory();
     const [todo, setTodo] = useState(null);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+    const [complete, setComplete] = useState("");
+    const [reopen, setReopen] = useState(false);
     const { id } = useParams();
 
     const GetTodo = async () => {
         axios.get('http://localhost:5000/api/todos/' + id, {
             headers: { Authorization: `Bearer ${getToken()}` }
         }).then(response => {
-            // setLoading(false); 
+            setLoading(false);
             const { data } = response;
             setTitle(data.title);
             setDescription(data.description);
+            setComplete(data.isComplete);
             setTodo(data);
             console.log(data);
         }).catch(error => {
-            //setLoading(false);
-            // if (error.response.status === 401) setError(error.response.data.message);
-            // else setError("Something went wrong. Please try again later.");
+            setLoading(false);
+            if (error.response.status === 401) setErrors([{ msg: error.response.data.title }]);
+            else setErrors([{ msg: "Something went wrong. Please try again later." }]);
         });
     }
 
     const UpdateTodo = async () => {
-        axios.put('http://localhost:5000/api/todos/' + todo.id, {
-            title: title,
-            description: description,
-            isComplete: todo.isComplete
-        }, {
-            headers: { Authorization: `Bearer ${getToken()}` }
-        }).then(response => {
-            // setLoading(false);          
-            history.push('/');
-        }).catch(error => {
-            //setLoading(false);
-            // if (error.response.status === 401) setError(error.response.data.message);
-            // else setError("Something went wrong. Please try again later.");
-        });
+        setLoading(true);
+        let err = validateFields([
+            {
+                msg: "Title is required",
+                value: title
+            },
+            {
+                msg: "Description is required",
+                value: description
+            },
+        ]);
+        setErrors(err);
+
+        if (err.length == 0) {
+            axios.put('http://localhost:5000/api/todos/' + todo.id, {
+                title: title,
+                description: description,
+                isComplete: complete
+            }, {
+                headers: { Authorization: `Bearer ${getToken()}` }
+            }).then(response => {
+                setLoading(false);
+                history.push('/');
+            }).catch(error => {
+                setLoading(false);
+                if (error.response.status === 400) setErrors([{ msg: error.response.data.title }]);
+                else if (error.response.status === 401) setErrors([{ msg: error.response.data.title }]);
+                else setErrors([{ msg: "Something went wrong. Please try again later." }]);
+            });
+        } else {
+            setLoading(false);
+        }
     }
 
     useEffect(() => {
@@ -54,36 +79,56 @@ export function Edit() {
     return (
         <div>
             <h2>Edit</h2>
-            <div>
-                <TextField
-                    id="todoTitle"
-                    label="Title"
-                    variant="outlined"
-                    value={title}
-                    onChange={(e) => {
-                        setTitle(e.target.value);
-                    }}
-                />
-                <TextField
-                    id="todoDescription"
-                    label="Description"
-                    variant="outlined"
-                    value={description}
-                    onChange={(e) => {
-                        setDescription(e.target.value);
-                    }}
-                />
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => {
-                        UpdateTodo();
-                    }}
-                >
-                    Update
+            <p><strong>Last updated:</strong> {todo && Date(todo.lastUpdate.ToStrin)}</p>
+            <br />
+            <div className="edit">
+                <FormGroup>
+                    <TextField
+                        id="todoTitle"
+                        label="Title"
+                        variant="outlined"
+                        value={title}
+                        onChange={(e) => {
+                            setTitle(e.target.value);
+                        }}
+                    />
+                    <TextField
+                        id="todoDescription"
+                        label="Description"
+                        variant="outlined"
+                        value={description}
+                        onChange={(e) => {
+                            setDescription(e.target.value);
+                        }}
+                    />
+                    {(complete || reopen) &&
+                        <FormGroup row>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        onChange={() => {
+                                            setComplete(false);
+                                            setReopen(true);
+                                        }}
+                                        name="checkedB"
+                                        color="primary"
+                                    />
+                                }
+                                label="Task is marked as complete, reopen task?"
+                            />
+                        </FormGroup>
+                    }
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => {
+                            UpdateTodo();
+                        }}
+                    >
+                        Update
                     </Button>
+                </FormGroup>
             </div>
-
         </div>
     );
 }

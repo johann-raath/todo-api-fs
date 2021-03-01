@@ -1,13 +1,14 @@
 import React, { Component, useContext } from 'react'
 import './header.scss';
 import { Grid } from "@material-ui/core"
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { UserContext } from '../../context/userContext';
 import { Button } from '@material-ui/core';
 import { removeUserSession } from "../../utils/common"
 
 export function Header() {
     const { user, setUser } = useContext(UserContext);
+    const history = useHistory();
 
     return (
         <Grid
@@ -19,7 +20,7 @@ export function Header() {
             <h1>TODO</h1>
 
             {user && (
-                <div>
+                <div className="userActions">
                     <Button
                         variant="contained"
                         color="primary"
@@ -37,19 +38,20 @@ export function Header() {
 
             {user ? (
                 <div>
-                    <span>{"Welcome " + user}</span>
+                    <span className="salutation">{"Welcome " + user}</span>
                     <Button
                         variant="contained"
                         color="primary"
                         onClick={() => {
                             setUser(null);
                             removeUserSession();
+                            history.push("/");
                         }}>
                         Logout
                 </Button>
                 </div>
             ) : (
-                    <div>
+                    <div className="userActions">
                         <Button
                             variant="contained"
                             color="primary"

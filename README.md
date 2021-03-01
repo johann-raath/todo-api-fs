@@ -36,15 +36,15 @@ Depending on the role being assessed instructions may vary.
 ### Frontend role
 * Choose a ui framework, preferably React, Angular+ or Vue & create a ui application in folder named **"Todo.UI"**
 * The following functionality should be implemented:
-  X* State management 
-  X* Register a user
-  X* Login
-  X* View a list of todos
-  X* Mark a todo as complete or incomplete from the list
-  X* Delete a todo from the list
-  X* Add a todo
-  X* Edit a todo
- X * Signout
+  * State management 
+  * Register a user
+  * Login
+  * View a list of todos
+  * Mark a todo as complete or incomplete from the list
+  * Delete a todo from the list
+  * Add a todo
+  * Edit a todo
+  * Signout
   * Styling is not a priority
   * Unit tests; you do not need full coverage. A few components is fine.
 * Please consider your git history as this will be reviewed
