@@ -6,6 +6,10 @@ export const getUser = () => {
     else return null;
 }
 
+export const getToken = () => {
+    return sessionStorage.getItem('token') || null;
+}
+
 export function useFormInput(initialValue) {
     const [value, setValue] = useState(initialValue);
 
