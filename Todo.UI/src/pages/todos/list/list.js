@@ -11,7 +11,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import { Link } from "react-router-dom";
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import { DeleteForeverIcon } from '@material-ui/icons';
 
 import './list.scss';
 import { Checkbox } from '@material-ui/core';
