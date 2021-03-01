@@ -33,9 +33,10 @@ export function List() {
     };
 
     const columns = [
-        { id: 'title', label: 'Title', minWidth: 170, align: 'left', },
-        { id: 'description', label: 'Description', minWidth: 170, align: 'left', },
-        { id: 'isComplete', label: 'Complete', minWidth: 170, align: 'right', format: Boolean },
+        { id: 'isComplete', label: 'Complete', minWidth: 170, align: 'left', format: Boolean },
+        { id: 'title', label: 'Title', minWidth: 170, align: 'left' },
+        { id: 'description', label: 'Description', minWidth: 170, align: 'left' },
+        { id: 'id', label: '', minWidth: 170, align: 'right', format: "Edit" },
         { id: 'id', label: '', align: 'right', format: "Delete" },
     ];
 
@@ -74,7 +75,7 @@ export function List() {
         }, {
             headers: { Authorization: `Bearer ${getToken()}` }
         }).then(response => {
-            // setLoading(false);            
+            // setLoading(false);            okay
             GetListItems();
         }).catch(error => {
             //setLoading(false);
@@ -86,6 +87,59 @@ export function List() {
     useEffect(() => {
         GetListItems();
     }, [])
+
+    const renderTableCell = (column, row) => {
+        const value = row[column.id];
+        switch (column.format) {
+            case Boolean:
+                return (
+                    <Checkbox checked={value} name="IsComplete" onChange={() => {
+                        ToggleComplete(row["id"], row["isComplete"]);
+                    }} />
+                );
+            case "Edit":
+                return (
+                    <Button
+                        variant="contained"
+                        color="primary"
+                    >
+                        <Link to={"/todo/edit/" + row["id"]}>Edit</Link>
+                    </Button>
+                );
+            case "Delete":
+                return (
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={() => { DeleteTodo(value); }} >
+                        <DeleteForeverIcon style={{ color: "#fff" }}></DeleteForeverIcon>
+                    </Button>
+                );
+            default:
+                return 'foo';
+        }
+    }
+
+
+
+
+    // {column.format && typeof value === 'boolean'
+    // ?
+    // <Checkbox checked={value} name="IsComplete" onChange={() => {
+    //     ToggleComplete(row["id"], row["isComplete"]);
+    // }} />
+    // :
+    // column.format && column.format == "Delete"
+    //     ?
+    //     <Button
+    //         variant="contained"
+    //         color="secondary"
+    //         onClick={() => { console.log(value); DeleteTodo(value); }} >
+    //         <DeleteForeverIcon style={{ color: "#fff" }}></DeleteForeverIcon>
+    //     </Button>
+    //     :
+    //     value}
+
 
     return (
         <div>
@@ -114,22 +168,9 @@ export function List() {
                                                 const value = row[column.id];
                                                 return (
                                                     <TableCell key={column.id} align={column.align}>
-                                                        {column.format && typeof value === 'boolean'
-                                                            ?
-                                                            <Checkbox checked={value} name="IsComplete" onChange={() => {
-                                                                ToggleComplete(row["id"], row["isComplete"]);
-                                                            }} />
-                                                            :
-                                                            column.format && column.format == "Delete"
-                                                                ?
-                                                                <Button
-                                                                    variant="contained"
-                                                                    color="secondary"
-                                                                    onClick={() => { console.log(value); DeleteTodo(value); }} >
-                                                                    <DeleteForeverIcon style={{ color: "#fff" }}></DeleteForeverIcon>
-                                                                </Button>
-                                                                :
-                                                                value}
+                                                        {
+                                                            column.format ? renderTableCell(column, row) : value
+                                                        }
                                                     </TableCell>
                                                 );
                                             })}

@@ -11,11 +11,10 @@ export function Create() {
     const description = useFormInput('');
 
     const CreateTodo = async (title, description) => {
-
         axios.post('http://localhost:5000/api/todos', {
             title: title.value,
             description: description.value,
-            IsComplete: false
+            isComplete: false
         }, {
             headers: { Authorization: `Bearer ${getToken()}` }
         }).then(response => {
@@ -30,7 +29,7 @@ export function Create() {
 
     return (
         <div>
-            <h2>Login</h2>
+            <h2>Create</h2>
             <TextField
                 id="todoTitle"
                 label="Title"

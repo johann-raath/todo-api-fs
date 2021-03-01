@@ -3,12 +3,12 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import { useState, useMemo, useEffect } from "react";
 import { UserContext } from "./context/userContext";
 import { ListContext } from './context/listContext';
-
 import { Container } from "@material-ui/core";
 import { Header } from "./components/header/header";
 import { Login } from "./pages/login/login";
 import { List } from "./pages/todos/list/list";
 import { Create } from "./pages/todos/create/create";
+import { Edit } from "./pages/todos/edit/edit";
 import { Register } from './pages/register/register';
 import { getUser } from "./utils/common";
 
@@ -32,6 +32,7 @@ function App() {
             <ListContext.Provider value={listItemsValue}>
               <Route path="/" exact component={List}></Route>
               <Route path="/todo/create" component={Create}></Route>
+              <Route path="/todo/edit/:id" component={Edit}></Route>
             </ListContext.Provider>
           ) : (
               <div>

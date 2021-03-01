@@ -39,11 +39,11 @@ Depending on the role being assessed instructions may vary.
   X* State management 
   X* Register a user
   X* Login
-  * View a list of todos
-  * Mark a todo as complete or incomplete from the list
-  * Delete a todo from the list
-  * Add a todo
-  * Edit a todo
+  X* View a list of todos
+  X* Mark a todo as complete or incomplete from the list
+  X* Delete a todo from the list
+  X* Add a todo
+  X* Edit a todo
  X * Signout
   * Styling is not a priority
   * Unit tests; you do not need full coverage. A few components is fine.
